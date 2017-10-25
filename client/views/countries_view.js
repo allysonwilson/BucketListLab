@@ -6,8 +6,11 @@ var viewer = {};
 viewer.start = function (){
   requestHelper.getRequest("https://restcountries.eu/rest/v2/all", function(countries){
     render.dropDown(countries);
+  });
+
+  requestHelper.getRequest("http://localhost:3000/api/countries", function(data){
+    render.list(data);
   })
-  
 }
 
 

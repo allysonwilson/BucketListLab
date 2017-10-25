@@ -90,8 +90,11 @@ var viewer = {};
 viewer.start = function (){
   requestHelper.getRequest("https://restcountries.eu/rest/v2/all", function(countries){
     render.dropDown(countries);
+  });
+
+  requestHelper.getRequest("http://localhost:3000/api/countries", function(data){
+    render.list(data);
   })
-  
 }
 
 
@@ -142,7 +145,7 @@ module.exports = requestHelper;
 var render = {}
 
 render.dropDown = function(array) {
-  var mainDiv = document.getElementById("country-list");
+  var div = document.getElementById("select");
   var select = document.createElement("select");
 
   var firstOption = document.createElement("option");
@@ -158,9 +161,21 @@ render.dropDown = function(array) {
     select.appendChild(option);
   }
 
-  mainDiv.appendChild(select);
+  div.appendChild(select);
 }
 
+render.list = function(array) {
+  var div = document.getElementById("saved-data");
+  var ol = document.createElement("ol");
+
+  for (var item of array) {
+    var listItem = document.createElement("li")
+    listItem.innerText = item.name;
+    ol.appendChild(listItem);
+  }
+
+  div.appendChild(ol);
+}
 
 
 
