@@ -9,7 +9,7 @@ var requestHelper = {
     })
 
     xhr.send();
-  }
+  },
 
   post: function ( url, fishingLine, info) {
     var xhr = new XMLHttpRequest();

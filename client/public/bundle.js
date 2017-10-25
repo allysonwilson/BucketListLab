@@ -65,16 +65,106 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-
-
+var countriesView = __webpack_require__(1)
 
 var app = function () {
+countriesView.start();
+
 
 }
 
 window.addEventListener('DOMContentLoaded', app )
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var requestHelper = __webpack_require__(2);
+var render = __webpack_require__(3);
+
+var viewer = {};
+
+viewer.start = function (){
+  requestHelper.getRequest("https://restcountries.eu/rest/v2/all", function(countries){
+    render.dropDown(countries);
+  })
+  
+}
+
+
+
+
+module.exports = viewer;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var requestHelper = {
+  getRequest: function (url, fishingLine) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    xhr.addEventListener('load', function(){
+      var data = JSON.parse(this.responseText);
+      fishingLine(data);
+    })
+
+    xhr.send();
+  },
+
+  post: function ( url, fishingLine, info) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    var stringToSubmit = JSON.stringify(info);
+
+    xhr.addEventListener('load' , function() {
+      var data = JSON.parse(this.responseText);
+      fishingLine(data);
+    })
+
+    xhr.send(stringToSubmit);
+  }
+}
+
+module.exports = requestHelper;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+var render = {}
+
+render.dropDown = function(array) {
+  var mainDiv = document.getElementById("country-list");
+  var select = document.createElement("select");
+
+  var firstOption = document.createElement("option");
+  firstOption.innerText = "Add a country to your Bucket List";
+  firstOption.selected = true;
+  firstOption.disabled = true;
+
+  select.appendChild(firstOption);
+
+  for (var item of array) {
+    var option = document.createElement("option");
+    option.innerText = item.name;
+    select.appendChild(option);
+  }
+
+  mainDiv.appendChild(select);
+}
+
+
+
+
+module.exports = render;
 
 
 /***/ })
