@@ -68,10 +68,14 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var countriesView = __webpack_require__(1)
+var formCall = __webpack_require__(4)
+
 
 var app = function () {
-countriesView.start();
 
+formCall()
+
+countriesView.start();
 
 }
 
@@ -145,8 +149,7 @@ module.exports = requestHelper;
 var render = {}
 
 render.dropDown = function(array) {
-  var div = document.getElementById("select");
-  var select = document.createElement("select");
+  var select = document.getElementById("country-selector");
 
   var firstOption = document.createElement("option");
   firstOption.innerText = "Add a country to your Bucket List";
@@ -161,11 +164,12 @@ render.dropDown = function(array) {
     select.appendChild(option);
   }
 
-  div.appendChild(select);
 }
 
 render.list = function(array) {
   var div = document.getElementById("saved-data");
+  while(div.firstChild){div.removeChild(div.firstChild)}
+
   var ol = document.createElement("ol");
 
   for (var item of array) {
@@ -180,6 +184,30 @@ render.list = function(array) {
 
 
 module.exports = render;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = __webpack_require__(3);
+var requestHelper = __webpack_require__(2)
+var onSelect = function(event) {
+  var addition = {name: this.value};
+
+  requestHelper.post("http://localhost:3000/api/countries", function(result){
+    render.list(result);
+  }, addition)
+}
+
+
+var formCall = function() {
+  var form = document.getElementById("country-selector");
+  form.addEventListener("change", onSelect);
+}
+
+
+module.exports = formCall;
 
 
 /***/ })

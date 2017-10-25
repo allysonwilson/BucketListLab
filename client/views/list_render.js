@@ -1,8 +1,7 @@
 var render = {}
 
 render.dropDown = function(array) {
-  var div = document.getElementById("select");
-  var select = document.createElement("select");
+  var select = document.getElementById("country-selector");
 
   var firstOption = document.createElement("option");
   firstOption.innerText = "Add a country to your Bucket List";
@@ -17,11 +16,12 @@ render.dropDown = function(array) {
     select.appendChild(option);
   }
 
-  div.appendChild(select);
 }
 
 render.list = function(array) {
   var div = document.getElementById("saved-data");
+  while(div.firstChild){div.removeChild(div.firstChild)}
+
   var ol = document.createElement("ol");
 
   for (var item of array) {
